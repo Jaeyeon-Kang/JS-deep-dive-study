@@ -95,7 +95,42 @@
     - 리페인트 : 재결합된 렌더 트리를 기반으로 다시 페인트를 하는 것
 
      ![image](https://github.com/user-attachments/assets/16cf1a08-3a2c-4f4a-aded-f74733054c0f)
+
+    #### 리플로우/리페인트를 최소화하기 위한 꿀팁들
+    ```js
+    // documentFragment 사용
+
+    const frag = document.createDocumentFragment();
+
+    for (let i = 0; i < 1000; i++) {
+      const li = document.createElement('li');
+      li.textContent = `item ${i}`;
+      frag.appendChild(li);
+    }
+    
+    // 이 때까진 실제 DOM에 아무 영향 없음
+    document.querySelector('ul').appendChild(frag);
+
+    //    → 위 코드는 li 1000개를 미리 documentFragment에 모아놨다가 한 번에 진짜 DOM에 붙임.
+    // 장점: appendChild를 1000번 하는 대신 1번만 DOM에 접근하므로 리플로우도 1번만 발생함.
+    ```
  
+    ```js
+    // display: none 사용
+
+    const box = document.getElementById('box');
+    box.style.display = 'none'; // 화면에서 숨김
+    
+    // 여러 style 속성 변경
+    box.style.width = '400px';
+    box.style.height = '200px';
+    box.style.backgroundColor = 'skyblue';
+    
+    box.style.display = 'block'; // 다시 보여줌
+
+    //  이러면 중간의 변경 사항들이 리플로우 없이 누적되고 마지막 display: block에서 한 번에 반영됨.
+    ```
+  
     #### ✅ documentFragment 역할 in React
     React 자체가 컴포넌트를 가상 DOM 트리로 먼저 구성해서 마지막에 한 번에 실제 DOM에 패치함. 사실상 React는 자동으로 documentFragment 비슷한 구조를 내부에서 사용한다고 보면 됨.
     ```js
