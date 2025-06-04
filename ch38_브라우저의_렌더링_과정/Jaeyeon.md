@@ -95,6 +95,21 @@
     - 리페인트 : 재결합된 렌더 트리를 기반으로 다시 페인트를 하는 것
 
      ![image](https://github.com/user-attachments/assets/16cf1a08-3a2c-4f4a-aded-f74733054c0f)
+ 
+    #### ✅ documentFragment 역할 in React
+    React 자체가 컴포넌트를 가상 DOM 트리로 먼저 구성해서 마지막에 한 번에 실제 DOM에 패치함. 사실상 React는 자동으로 documentFragment 비슷한 구조를 내부에서 사용한다고 보면 됨.
+    ```js
+    const List = ({ items }) => {
+    return (
+            <ul>
+              {items.map(item => <li key={item.id}>{item.text}</li>)}
+            </ul>
+          );
+        };
+
+    ```
+    - 여기서 items.length가 1000이어도 React는 Virtual DOM에서 먼저 다 계산한 다음 실제 DOM에는 diff 비교 후 바뀐 부분만 갱신함. (React 18부터는 concurrent rendering으로 더 최적화됨)
+      
 
     ## 38.8 자바스크립트 파싱에 의한 HTML 파싱 중단
  
