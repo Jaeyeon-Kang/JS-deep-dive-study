@@ -179,6 +179,17 @@
       ![image](https://github.com/user-attachments/assets/d9f5b301-004d-4ed2-a8ac-1c02feda3695)
 
 
+    
+    | script 종류        | HTML 파싱 멈춤? | 실행 시점                              | 순서 보장 |
+    | ---------------- | ----------- | ---------------------------------- | ----- |
+    | 일반 `<script>`    | ✅ O         | 다운로드 직후 (즉시)                       | ✅ O   |
+    | `<script async>` | ❌ X         | 다운로드 직후 (즉시)                       | ❌ X   |
+    | `<script defer>` | ❌ X         | HTML 파싱 완료 후 (DOMContentLoaded 직전) | ✅ O   |
+    
+    
+    <img src="https://github.com/user-attachments/assets/3a3c7558-a3dc-4ebf-8042-00757c5c7334" width="700" alt="defer 설명 이미지">
+
+
 
 
 
