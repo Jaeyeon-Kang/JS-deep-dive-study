@@ -98,7 +98,10 @@
     - 공백 문자로 구분하여 여러 개의 값을 가질 수 없다.
     - 중복된 id 값을 갖는 요소가 여러 개 존재할 수 있으며 에러 발생 대신 id 값을 갖는 첫 번째 요소 노드만 반환한다.
     - 인수로 전달된 id 값을 갖는 HTML 요소가 존재하지 않는 경우 getElementById 메서드는 null을 반환한다.
-    
+    ```js
+    const elem = document.getElementById('없는아이디'); // elem은 null
+    ```
+
 
 - HTML 요소에 id 어트리뷰티를 부여하면 id 값과 동일한 이름의 전역 변수가 암묵적으로 선언되고 해당 노드 객체가  할당되는 부수 효과가 있다.
     ```js
@@ -108,7 +111,8 @@
             <div id="foo"></div>
             <script>
                 //id 값과 동일한 이름의 전역 변수가 암묵적으로 선언되고 해당 노드 객체가 할당된다.
-                console.log(foo === document.getElementsById('foo')); //true
+                
+                console.log(foo === document.getElementById('foo')); //true
                 
                 //암묵적 전역으로 생성된 전역 프로퍼티는 삭제되지만 전역 변수는 삭제되지 않는다.
                 delete foo;
@@ -173,14 +177,14 @@
                 console.log($lisFromDocument); // HTMLCollection(4) [li, li, li, li]
 
                 // ul#fruits 요소의 자손 노드 중에서 태그 이름이 li인 요소 노드를 모두 탐색하여 반환한다.
-                const $fruits = document.getElementsById('fruits');
+                const $fruits = document.getElementById('fruits');
                 const $lisFromFruits = $fruits.getElementsByTagName('li');
                 console.log($lisFromDocument); // HTMLCollection(3) [li, li, li]
                 </script>
             </body>
         </html>
     ```
-     - Element. prototype. getElementByTagName 메서드는 특정 요소 노드를 통해 호출하며, 특정 요소 노드의 자손 노드 중에서 요소 노드를 탐색하여 반환한다.(getElementByClassName도 동일)
+     - Element. prototype. getElementsByTagName 메서드는 특정 요소 노드를 통해 호출하며, 특정 요소 노드의 자손 노드 중에서 요소 노드를 탐색하여 반환한다.(getElementByClassName도 동일)
 
     ```js
     <!DOCTYPE html>
