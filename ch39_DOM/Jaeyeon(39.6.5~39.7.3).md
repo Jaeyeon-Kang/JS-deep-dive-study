@@ -250,6 +250,8 @@
 #### 39.7.3. HTML 어트리뷰트 vs DOM 프로퍼티
 
 * 요소 노드 객체는 HTML 어트리뷰트에 대응하는 DOM 프로퍼티를 가짐
+![image](https://github.com/user-attachments/assets/ed1c3f66-1e3c-443a-8a82-764ca585ddc3)
+
 
 * **DOM 프로퍼티**
 
@@ -279,3 +281,21 @@
 * `getAttribute()`로 얻은 값은 **항상 문자열**
 
 * DOM 프로퍼티는 **타입 다양** (예: `checked`는 Boolean)
+
+```js
+<!DOCTYPE html>
+<html>
+  <body>
+    <input type="checkbox" checked>
+    <script>
+      const $checkbox = document.querySelector('input[type=checkbox]');
+
+      // getAttribute 메서드로 취득한 어트리뷰트 값은 언제나 문자열이다.
+      console.log($checkbox.getAttribute('checked')); // ''
+
+      // DOM 프로퍼티로 취득한 최신 상태 값은 문자열이 아닐 수도 있다.
+      console.log($checkbox.checked); // true
+    </script>
+  </body>
+</html>
+```
