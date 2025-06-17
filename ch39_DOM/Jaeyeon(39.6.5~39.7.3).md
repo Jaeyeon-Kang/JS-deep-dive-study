@@ -12,6 +12,31 @@
 * 두 번째 노드가 호출한 노드의 **자식 노드가 아니면 DOMException 발생**
 * 두 번째 노드가 `null`인 경우 **마지막 자식 노드로 추가됨** (`=appendChild`와 동일)
 
+```js
+<!DOCTYPE html>
+<html>
+  <body>
+    <ul id="fruits">
+      <li>Apple</li>
+      <li>Banana</li>
+    </ul>
+  </body>
+  <script>
+    const $fruits = document.getElementById('fruits');
+
+    // 요소 노드 생성
+    const $li = document.createElement('li');
+
+    // 텍스트 노드를 $li 요소 노드의 마지막 자식 노드로 추가
+    $li.appendChild(document.createTextNode('Orange'));
+
+    // $li 요소 노드를 첫 번째 요소 노드를 두 번째 노드 앞에 삽입
+    $fruits.insertBefore($li, $fruits.lastElementChild);
+    // Apple - Orange - Banana
+  </script>
+</html>
+```
+
 ### 39.6.6. 노드 이동
 
 * DOM에 새로운 요소들을 추가하면 **기존 노드들이 이동**함
