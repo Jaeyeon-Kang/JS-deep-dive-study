@@ -153,3 +153,55 @@
 - 이 밖에도 forEach, entries, keys, values, supports 메서드를 제공한다.
   
 ### 39.8.3 요소에 적용되어 있는 CSS 스타일 참조 
+- style 프로퍼티는 인라인 스타일만 반환하기 때문에 클래스를 적용한 스타일이나 상속을 통해 암묵적으로 적용된 스타일은 style 프로퍼티로 참조할 수 없다.
+- HTML 요소에 적용되어 있는 모든 CSS 스타일을 참조해야 할 경우 getConputedStyle 메서드를 사용한다.
+  ```js
+  window.getComputedStyle(element[, pseudo])
+  ```
+  ```js
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <style>
+      body {
+        color: red;
+      }
+      .box {
+        width: 100px; 
+        height: 50px;
+        background-color: cornsilk;
+        border: 1px solid black;
+      }
+      .box::before {
+        content: 'Hello';
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">Box</div>
+
+    <script>
+      const $box = document.querySelector('.box');
+      
+      const computedStyle = window.getComputedStyle($box);
+      console.log(computedStyle); // CSSStyleDeclaration
+
+      // 임베딩 스타일
+      console.log(computedStyle.width); // 100px
+      console.log(computedStyle.height); // 50px
+      console.log(computedStyle.backgroundColor); // rgb(255, 248, 220)
+      console.log(computedStyle.border); // 1px solid rgb(0, 0, 0)
+
+      // 상속 스타일(body → .box)
+      console.log(computedStyle.color); // rgb(255, 0, 0)
+
+      // 기본 스타일 
+      console.log(computedStyle.display); // block
+      
+      // 의사요소 ::before의 스타일을 취득
+      const computedStyle2 = window.getComputedStyle($box, ':before');
+      console.log(computedStyle2.content); // "Hello"
+    </script>
+  </body>
+  </html>
+  ```
