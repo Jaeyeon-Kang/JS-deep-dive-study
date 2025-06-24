@@ -103,9 +103,37 @@
 
 * 이벤트 핸들러는 대부분 이벤트를 발생시킬 이벤트 타깃에 바인딩한다.
 * 하지만 반드시 이벤트 타깃에 이벤트 핸들러를 바인딩해야 하는 것은 아니다.
+  * ex. 버튼을 클릭했을 때의 이벤트를 부모 요소나 문서 전체에서 잡을 수도 있음 (이벤트 위임, 버블링)
 * 이벤트 핸들러는 이벤트 타깃 또는 전파된 이벤트를 캐치할 DOM 노드 객체에 바인딩한다.
 * 이벤트 핸들러 프로퍼티 방식은 이벤트 핸들러 어트리뷰트 방식의 HTML과 자바스크립트가 뒤섞이는 문제를 해결할 수 있다.
+  
+  ```js
+    // 어트리뷰트 방식(옛날 방식, HTML과 JS 섞임)
+    <button onclick="alert('hi!')">눌러봐</button>
+  ```
+  ```js
+   // 프로퍼티 방식(더 권장되는 방식, JS에서만 처리)
+    <button id="btn">눌러봐</button>
+    <script>
+      document.getElementById('btn').onclick = function() {
+        alert('hi!');
+      }
+    </script>
+  ```
 * 하지만 이벤트 핸들러 프로퍼티에 하나의 이벤트 핸들러만 바인딩할 수 있다는 단점이 있다.
+  ```js
+    // 이 경우 '두 번째 핸들러'만 실행됨. 여러 개를 동시에 실행하고 싶으면 addEventListener를 써야 함.
+    <button id="btn2">눌러봐</button>
+    <script>
+      var btn = document.getElementById('btn2');
+      btn.onclick = function() {
+        alert('첫 번째 핸들러');
+      }
+      btn.onclick = function() {
+        alert('두 번째 핸들러');
+      }
+    </script>
+  ```
 
 ### 40.3.3 addEventListener 메서드 방식
 
