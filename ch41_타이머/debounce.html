@@ -1,0 +1,28 @@
+<html>
+<body>
+  <input type="text">
+  <div class="msg"></div>
+  <script>
+    const $input = document.querySelector('input');
+    const $msg = document.querySelector('.msg');
+
+    /**
+     * debounce 함수는 타이머 ID를 기억하는 클로저를 반환한다.
+     * delay가 경과하기 이전에 이벤트가 발생하면 이전 타이머를 취소하고 새로운 타이머를 재설정한다.
+     */
+    const debounce = (callback, delay) => {
+      let timerId;
+      return event => {
+        if (timerId) clearTimeout(timerId);
+        timerId = setTimeout(callback, delay, event);
+      };
+    };
+
+    // debounce 함수가 반환하는 클로저를 input 이벤트 핸들러로 등록
+    // 300ms 동안 추가 input 이벤트가 없으면 한 번만 실행
+    $input.oninput = debounce(e => {
+      $msg.textContent = e.target.value;
+    }, 300);
+  </script>
+</body>
+</html>
