@@ -192,13 +192,16 @@ for (const num of infiniteFibonacci) {
   if (num > 10000) break;
   console.log(num); // 1 2 3 5 8 ... 2584 4161 6765
 }
+
+// 일반적으로 이터러블을 직접 만들려면 복잡하게 [Symbol.iterator] 이런 거 구현해야 되는데, 제너레이터 함수 쓰면 저렇게 간단하게 "이터러블" 만들 수 있다는 시범 케이스다.
 ```
 
 ### 비동기 처리
 
-* 제너레이터 함수를 활용해 프로미스를 사용한 비동기 처리를 동기 처리처럼 구현할 수 있다. (프로미스의 후속 처리 메서드 then/catch/finally 없이 비동기 처리 결과를 반환하도록 구현할 수 있다.)
-* 제너레이터 실행기가 필요하다면 직접 구현하는 것보다 co 라이브러리를 사용하는 것이 좋다.
+- 제너레이터와 프로미스를 조합하면 비동기 코드를 마치 동기 코드처럼 쓸 수 있다.
 
+- 원래 프로미스 쓰면 .then(), .catch() 같은 거 줄줄이 붙어야 하는데 제너레이터로 yield 할 때마다 다음 프로미스 결과를 받아서 순차적으로 처리 가능.
+- 
 ```js
 // 제너레이터 실행기
 const async = generatorFunc => {
@@ -227,17 +230,14 @@ const async = generatorFunc => {
 
 #### 코드 동작 순서
 
-* async 함수가 호출되면 인수로 전달받은 제너레이터 함수 fetchTodo를 호출하여 제너레이터 객체를 생성하고 onResolved 함수를 반환한다.
-* onResolved 함수는 상위 스코프의 generator 변수를 기억하는 클로저이다.
-* async 함수가 반환한 onResolved 함수를 즉시 호출하여, 위에서 생성한 제너레이터 객체의 next 메서드를 처음 호출한다.
-* next 메서드가 처음 호출되면 제너레이터 함수 fetchTodo의 첫 번째 yield 문까지 실행된다.
-* 이때 next 메서드가 반환한 이터레이터 리절트 객체의 done 프로퍼티 값이 false라면, 이터레이터 리절트 객체의 value 프로퍼티 값(첫 번째 yield된 fetch 함수가 반환한 프로미스가 resolve한 Response 객체)을 onResolved 함수에 인수로 전달하면서 재귀 호출한다.
-* onResolved 함수에 인수로 전달된 Response 객체를 next 메서드에 인수로 전달하면서 next 메서드를 두 번째로 호출한다.
-* 이때 next 메서드에 인수로 전달한 Response 객체는 제너레이터 함수 fetchTodo의 response 변수에 할당되고, 제너레이터 함수 fetchTodo의 두 번째 yield 문까지 실행된다.
-* next 메서드가 반환한 이터레이터 리절트 객체의 done 프로퍼티 값이 false라면, 이터레이터 리절트 객체의 value 프로퍼티 값(두 번째 yield된 response.json 메서드가 반환한 프로미스가 resolve한 todo 객체)을 onResolved 함수에 인수로 전달하면서 재귀 호출한다.
-* onResolved 함수에 인수로 전달된 todo 객체를 next 메서드에 인수로 전달하면서 next 메서드를 세 번째로 호출한다.
-* 이때 next 메서드에 인수로 전달한 todo 객체는 제너레이터 함수 fetchTodo의 todo 변수에 할당되고, 제너레이터 함수 fetchTodo가 끝까지 실행된다.
-* next 메서드가 반환한 이터레이터 리절트 객체의 done 프로퍼티 값이 true라면, 이터레이터 리절트 객체의 value 프로퍼티 값(제너레이터 함수 fetchTodo의 반환값인 undefined)을 그대로 반환하고 처리를 종료한다.
+* async 함수에 제너레이터 함수(fetchTodo)를 전달 → 제너레이터 객체 만듦.
+* 내부에서 onResolved라는 함수가, 제너레이터의 next()를 호출해서 첫 번째 yield까지 코드 실행.
+* yield에 걸린 프로미스가 끝날 때까지 기다림.
+* 끝나면 결과 값을 다시 next()에 넣고, 다음 yield까지 실행.
+* 이걸 반복해서, 모든 yield가 끝날 때까지 순서대로 진행.
+* done이 true가 되면 끝.
+
+- 결국, 프로미스 체인이나 async/await 안 쓰고 yield로 '멈췄다-다시시작'을 반복하면서 비동기 결과를 이어받아 처리하는 구조다.
 
 ---
 
