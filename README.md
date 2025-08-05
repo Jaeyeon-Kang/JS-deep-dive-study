@@ -13,6 +13,8 @@
 - **참여 인원**: 3명
 
 ## 🤓 스터디 멤버
+<img src="https://github.com/user-attachments/assets/a9f43803-ebdf-451f-b96c-8fee29b0fc49" width="800"/>
+
 
 - 강재연
 - 윤주연
